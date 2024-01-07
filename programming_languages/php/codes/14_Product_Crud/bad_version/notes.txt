@@ -1,0 +1,31 @@
+Run Xampp -> Apache and MySql 
+_____________________________
+go to localhost : [http://localhost/dashboard/](http://localhost/dashboard/) or [http://127.0.0.1/dashboard/](http://127.0.0.1/dashboard/) 
+got to phpmyadmin : http://localhost/phpmyadmin/
+Create a new Database :  click the new +
+Database name : products_crud 
+click the create button 
+create tables 
+1- products : with six columns 6
+1.1 the columns : 
+    - id - type : int - and it Auto Increment as A_I -   
+    - title - varchar - Length/values : 512 - not Null (Required) - 
+    - Descriptoin - LongText - Length/values : 512 - may be Null -  
+    - Image - varchar - Length/values : 2048 - may be Null -  
+    - Price - Decimal - Length/values : 10,2 - not Null (Required) -  
+    - create_date - DATETIME - not Null  -  
+then save the Table .
+
+1.2 got to Insert to add couple of records 
+    1.2.1 the Id will be picked up automatically 
+    1.2.2 title       : Iphone 11
+    1.2.3 Descriptoin : Empty
+    1.2.4 Image       : Empty
+    1.2.5 Price       : 2000
+    1.2.6 Date        : current_date
+
+_____________________________
+start with index.php 
+
+after create the home ( welcome ) index.php , 
+connetion to the Database :
