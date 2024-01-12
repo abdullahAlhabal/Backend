@@ -14,19 +14,20 @@ $statement->execute();
 $products = $statement->fetchAll(PDO::FETCH_ASSOC); // i want to each record inside the table to be fetched as an asscoiative array  
 
 
-echo '<pre>';
-echo "<h1> We are herr ! </h1>";
-var_dump($products);
-echo '</pre>';
 
-/*
-$pdo = new PDO('mysql:host=localhost;port=3306;dbname=products_crud','root','');
-// mysql: hots=localhost;port=; dbnam=
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-$statement = $pdo->prepare('SELECT * FROM products ORDER BY create_date DESC');
-$statement->execute();
-$products = $statement->fetchAll(PDO::FETCH_ASSOC);
- */
+// $pdo = new PDO();
+// dsn , user , password
+// dsn : mysql: host=localhost;port=3306;dbname=products_crud
+
+// setAttribute(PDO:ATTR_ERRMODE,PDO:ERRMODE_EXCEPTION);
+
+// statement - execute - fetchAll
+// $statement = $pdo->prepare('SELECT * FROM products ORDER BY create_date DESC');
+// $statement->execute();
+// $products = $statement->fetchAll(PDO:FETCH_ACSSOC);
+
+
+
 ?>
 
 <!doctype html>
@@ -46,6 +47,11 @@ $products = $statement->fetchAll(PDO::FETCH_ASSOC);
       </head>
 
       <body>
+        <h1> Product CRUD</h1>
+
+        <p>
+          <a href="create.php" class="btn btn-success"> Create </a>
+        </p>
 
         <!-- get table design from Bootstrap -->
         <table class="table">
@@ -68,13 +74,34 @@ $products = $statement->fetchAll(PDO::FETCH_ASSOC);
             <?php foreach($products as $i => $product):?>
               <tr>
                 <th scope='row'> <?php echo $i ?> </th>
-                <td><?php echo $product['image'] ?></td>
+                <td>
+                  <img src="<?php echo $product['image'] ?>" class="thump-image">
+                </td>
                 <td><?php echo $product['title'] ?></td>
                 <td><?php echo $product['price'] ?></td>
                 <td><?php echo $product['create_date'] ?></td>
                 <td>
-                  <button type="button" class="btn btn-sm btn-outline-primary">Edit</button>
-                  <button type="button" class="btn btn-sm btn-outline-danger">Delete</button>
+                  <!-- this only open the form of the Edit|update  -->
+                  <!-- <button type="button" class="btn btn-sm btn-outline-primary d-inline">Edit</button> -->
+                  <a href="update.php?id=<?php echo $product['id'] ?>" class="btn btn-sm btn-outline-primary d-inline" >Edit</a>
+
+                  <!-- <button type="button" class="btn btn-sm btn-outline-danger">Delete</button> -->
+               
+                  <!-- <a href="delete.php?id=<?php # echo $product['id']?>" type="button" class="btn btn-sm btn-outline-danger" >Delete</a> -->
+               
+                <?php 
+                  # whenever click the delete button redirect us into delete.php 
+                  # so we need to change it from button to <a></a> tag , and send the id of the product with it , as a query string .
+                  # when we click this button , it make a change in the database , so it's better to do that with method POST , and in order to do that , we need to make a form and in this form
+                  # we should put the <a></a> tag .
+                  ?>
+
+                <!-- that runs the actul update  -->
+                <form action="delete.php" method="POST" class="d-inline">
+                  <input type="hidden" name="id" value="<?php echo $product['id'] ?>">
+                  <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                </form>
+
                 </td>
               </tr>
             <?php endforeach ?>
