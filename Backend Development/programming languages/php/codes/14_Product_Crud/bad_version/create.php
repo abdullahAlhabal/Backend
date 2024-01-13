@@ -18,7 +18,7 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 // and it's in the URL , so when we submit the form using GET the parameters are in the URL , 
 
 
-// Supoer Global like :  , $_COOKIE , $_ENV , $_FILES , $_GET , $_POST , $_REQUEST , $_SERVER , $_SESSION
+// Super Global like :  , $_COOKIE , $_ENV , $_FILES , $_GET , $_POST , $_REQUEST , $_SERVER , $_SESSION
 
 // $_GET
 
@@ -262,11 +262,3 @@ function randomString($n){
       </body>
 
     </html>
-
-
-    <?php
-    
-    /*
-
-    */ 
-    ?>
