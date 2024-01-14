@@ -76,11 +76,71 @@ $prodcuts = $statement->fetchAll(PDO::FETCH_ASSOC)
     # do some logic here like 
     <img src="<?php echo $product[`image`]?>" class="thump-image">
 <?php endforeach; ?>
+```
+
+- in the table , we have section of `action` where we have button for `delete` | `Edit`
+    - `Edit` will only open the `html form` so we can use `<a></a>` tag here and we should send the `id` of the `product` with the request as a `query string`  . <br>
+    ```php
+        <a href="update.php?=<?php echo product['id']?>" type="button" class="btn btn-sm btn-outline-primary d-inline" >Edit</a>
+    ```
+    - 'Delete' 
+        - we cann't use the `button` without a `form`.
+        - we cann't use the `<a></a>` tag , because we make a change in the database , so we need to use `HTTP POST METHOD` .
+         whenever click the delete button redirect us into `delete.php` so we need to change it from `button` to `<a></a> tag` , and send the `id` of the `product` with it , as a `query string` .when we click this `button` , it make a change in the `database` , so it's better to do that with method `POST` , and in order to do that , we need to make a `form` and the `form` is a block level elemnet so we need to add a `bootstrap` calss `d-inline`.
+        ```php
+        <form action="delete.php" method="POST" class="">
+            <!-- hidden input to send the `id` of the product with the `form` as an `input value` -->
+            <input type="hidden" name="id" value="<?php echo $product['id']?>">
+            <button type="submit" class="btn btn-sm btn-outline-danger d-inline"> Delete </button>
+        </form>
+        ```
+
+# INDEX.PHP , THE FINAL CODE SHOULD LOOK LIKE . 
+
+```php
+    <table class="table">
+
+        <thead>
+
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Image</th>
+              <th scope="col">Title</th>
+              <th scope="col">Price</th>
+              <th scope="col">Create Date</th>
+              <th scope="col">Action</th>
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            <?php foreach($products as $i => $product):?>
+                <tr>
+                    <th scope='row'> <?php echo $i ?> </th>
+                    <td>
+                        <img src="<?php echo $product['image'] ?>" class="thump-image">
+                    </td>
+                    <td><?php echo $product['title'] ?></td>
+                    <td><?php echo $product['price'] ?></td>
+                    <td><?php echo $product['create_date'] ?></td>
+                    <td>
+                        <a href="update.php?id=<?php echo $product['id'] ?>" class="btn btn-sm btn-outline-primary d-inline" >Edit</a>
+                        <form action="delete.php" method="POST" class="d-inline">
+                            <input type="hidden" name="id" value="<?php echo $product['id'] ?>">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                        </form>
+                    </td>
+              </tr>
+            <?php endforeach; ?>
+
+          </tbody>
+
+        </table>
 
 ```
 
-
-#### in case we need to `INSERT' data into the database .
+#### in case we need to `insert' data into the database .
 
 
 - make the sql `statement` , `prepare` the `$pdo` and write the `statement` 
@@ -354,7 +414,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     header('location: index.php');
 ```
 
-# THE FINAL CODE SHOULD LOOK LIKE 
+# CREATE.PHP , THE FINAL CODE SHOULD LOOK LIKE . 
 
 ```PHP
 <?php 
@@ -493,3 +553,289 @@ function randomString($n){
 
     </html>
 ```
+
+#### in case we need to `delete' data from the database .
+
+- first , the  data source name 
+- get the `id` from the `POST` method using the super gloval variable `$_POST`
+- `prepare` the `sql` `statement` 
+- bind the values 
+- execute() the `statement` 
+- `redirect` to the `index.php` page
+
+```php
+$pdo = new PDO('mysql:host=localhost;port=3306;dbname=products_crud' , 'root' , '');
+$pdo->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+
+$id = $_POST['id'] ?? null;
+
+if(!$id)
+    header('location: index.php');
+
+$statement = $pdo->prepare('DELETE FROM products WHERE id = :id');
+
+$statement->bindValue(':id' , $id);
+
+$statement->execute();
+
+header('location : index.php');
+```
+
+#### in case we need to `edit' data from the database .
+
+- it will look like the `index.php`
+- first we need to search for the `id` in the request . <br>
+```php
+$id  = $_GET['id'] ?? null; 
+if(!$id)
+    header('location : index.php');
+```
+- after that , get the needed `product` from the database 
+    - `$pdo` .
+    - `$id` .
+    - prepare the statement. 
+    - bind the values .
+    - execute the statement.
+    - fetch the data `product`.
+```php
+
+$pdo = new PDO('mysql:host=localhost;port=3306;dbname=products','root','');
+
+$pdo->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+
+$id  = $_GET['id'] ?? null; 
+
+if(!$id)
+    header('location : index.php');
+
+$statement = $pdo->prepare('SELECT * FROM products WHERE id = :id ');
+$statement->bindValue(":id" , $id);
+$statement->execute();
+$product = $statement->fetch(PDO::FETCH::ASSOC);
+```
+
+- we will keep the code from `create.php` , the 'POST' and the `randomString()` function .
+- we need to display the `image` in the `form` , so in the top of `form`
+    - make sure that this product have an image 
+```php
+<?php if($product['image']):?>
+    <img src="<?php echo $product['image']?>">
+<?php endif;?>
+```
+- make a button to `GO BACK`  , before the `form`
+```php
+<p>
+    <a href="index.php" class="btn btn-sm btn-outline-secondary" >go back to products </a>
+</p>
+```
+- and populate the value , to use them in the `form`
+```php
+$title = $product['title'];
+$descrption = $product['descrption'];
+$price = $product['price'];
+```
+- we should delete the `create_date` 
+- for handling the `file upload` 
+    - first , we need to delete the old file 
+    ```php
+    if($product['image'])
+        unlink($product['image']);
+    ```
+    - second , the `imagePath` if the image is already exists . <br>
+    ```php
+    if($_SERVER('REQUEST_METHOD') === 'POST'){
+        if(!empty($errors)){
+            $imagePath = $product['image'];
+            $image = $_FILES['image'];
+            if($image && $image['tmp_name']){
+                $imagePath = 'images/'.randomString(8).'/'.$image['name'];
+                mkdir(dirname($imagePath));
+                move_uploaded_file($image['tmp_name'] , $imagePath);
+            }
+        }
+    }
+    ```
+    - the old image will be deleted after check is there a new image so the following code . <br>
+    ```php
+    if($product['image'])
+        unlink($product['image']);
+    ```
+    should be inside the  `if($image && $image['tmp_name'])`.
+    
+- and we should `UPDATE` from the `database` , not `INSERT` into it .
+```php
+$statement = $pdo->prepare(' UPDATE prodcuts SET title = :title, 
+                description = :description, 
+                price = :price, 
+                image = :image, 
+                WHERE id = :id 
+');
+$statement->bindValue(':id' , $id);
+$statement->bindValue(':title' , $title);
+$statement->bindValue(':description' , $description);
+$statement->bindValue(':price' , $price);
+$statement->bindValue(':image' , $imagePath);
+
+$statement->execute();
+```
+
+# the final code for update.php should look like 
+
+```php
+<?php 
+
+$pdo = new PDO('mysql:host=localhost;port=3306;dbname=products','root','');
+
+$pdo->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+
+$id  = $_GET['id'] ?? null; 
+
+if(!$id)
+    header('location : index.php');
+
+$statement = $pdo->prepare('SELECT * FROM products WHERE id = :id ');
+$statement->bindValue(":id" , $id);
+$statement->execute();
+
+$product = $statement->fetch(PDO::FETCH::ASSOC);
+
+$errors = [];
+
+$title = $product['title'];
+$descrption = $product['descrption'];
+$price = $product['price'];
+
+if($_SERVER['REQUEST_METHOD'] === 'POST'){
+
+  $title = $_POST['title'];
+  $description = $_POST['description'];
+  $price = $_POST['price'];
+
+  if(!$title){
+    $errors[] = 'Product Title is Required!';
+  }
+  if(!$price){
+    $errors[] = 'Product price is Required!';
+  }
+  
+  if(!is_dir('images')){
+    mkdir('images');
+  }
+
+  if(empty($errors)){
+
+    $imagePath = $product['image'];
+
+    $image = $_FILES['image'] ?? null ; 
+    
+    
+    if($image && $image['tmp_name']){
+    
+        if($product['image'])
+            unlink($product['image']);
+
+        $imagePath = 'images/'.randomString(8).'/'.$image['name'];
+
+        mkdir(dirname($imagePath));
+        
+        move_uploaded_file($image['tmp_name'] , $imagePath);
+    }
+    
+    $statement = $pdo->prepare(' UPDATE prodcuts SET title = :title, 
+                description = :description, 
+                price = :price, 
+                image = :image, 
+                WHERE id = :id 
+    ');
+    $statement->bindValue(':id' , $id);
+    $statement->bindValue(':title' , $title);
+    $statement->bindValue(':description' , $description);
+    $statement->bindValue(':price' , $price);
+    $statement->bindValue(':image' , $imagePath);
+    
+    $statement->execute();
+
+    header('location: index.php');
+  }
+}
+
+function randomString($n){
+  $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  $str = '';
+
+  for($i= 0 ; $i < $n ; $i++){
+    $index = rand(0 , strlen($characters) - 1);
+    $str .= $characters[$index];
+  }
+  return $str;
+}
+?>
+
+<!doctype html>
+    <html lang="en">
+      <head>
+
+          <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <link rel="stylesheet" href="app.css">
+
+        <title>Edit <?php echo $product['title']?></title>
+
+      </head>
+
+      <body>
+        <h1> Edit <?php echo $product['title']?></h1>
+
+      <?php if(!empty($errors)): ?>
+      <div class="alert alert-danger">
+          <?php foreach($errors as $error): ?>
+            <div><?php echo $error ?></div>
+          <?php endforeach; ?>
+      </div>
+      <?php endif; ?>
+
+        <p>
+          <a href="index.php" class="btn btn-success"> Cancle </a>
+        </p>
+
+        <form action="update.php" method="post" enctype="multipart/form-data">
+          
+            <?php if($product['image']):?>
+                <img src="<?php echo $product['image']?>">
+            <?php endif;?>
+
+          
+            <div class="form-group my-3">
+                <label for="title">Product title</label>
+                <input type="text" class="form-control" id="title"  placeholder="title" name="title" value="<?php echo $title?>">
+            </div>
+          
+            <div class="form-group my-3">
+                <label for="description">Product Description</label>
+                <textarea name="description" id="" cols="30" rows="5" class=form-control><?php echo $description ?></textarea>
+            </div>
+            
+            <div class="form-group my-3">
+                <label for="image">Product Image</label>
+                <br>
+                <input type="file"  id="image" name="image">
+            </div>
+
+            <div class="form-group my-3">
+                <label for="price">Product Price</label>
+                <input type="number" class="form-control" id="price" step=".01" placeholder="price" name="price" value="<?php echo $price ?>" >
+            </div>
+
+          <button type="submit" class="btn btn-primary mt-3">save the changes</button>
+
+        </form>
+
+      </body>
+
+    </html>
+```
+
