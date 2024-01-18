@@ -2,22 +2,22 @@
 # Using cURL in PHP 
 
 ## What is the CURL :
-is a Tool which gives us the possibility to interact , remotely to other services - Resources , get the information from the following URL , 
-we have already seen that i can actually get the informatino , using - file_get_content(); , but sometimes file_get_content() is blocked in terms of some security policies 
-and file_get_content() can't be used if we want to pass some additional headers to the Request or if we want to post some information , there we need to use the CUrl,
+is a Tool which gives us the possibility to interact , remotely to other services - Resources , get the information from the following `URL` , 
+we have already seen that i can actually get the informatino , using - `file_get_content();` , but sometimes `file_get_content()` is blocked in terms of some `security policies` 
+and `file_get_content()` can't be used if we want to pass some additional `headers` to the `Request` or if we want to `POST` some information , there we need to use the `CUrl`,
 
 ```php in index.php
 $url = '';
 ```
 
 ## Sample exampe to get data . 
-- first we need to use _curl_init()_ : to start this cRUL , and the _curl_init()_ create a **Resource|handle** and returns that Resource .
-- in *php* we have seven variables types : [String , Int , Float/Double , Boolean , Null , Array , Object , Resource]. 
+- first we need to use `_curl_init()_` : to start this cRUL , and the `_curl_init()_` create a **Resource|handle** and returns that Resource .
+- in *php* we have seven `Variables` types : [String , Int , Float/Double , Boolean , Null , Array , Object , Resource]. 
 - and the Resource is that which retruns from that url .
-- after create that Resource for the URL : we need to set a couple of _options_ on that _Resource_.
+- after create that Resource for the URL : we need to set a couple of `_options_` on that _Resource_.
 - by using : ```curl_setopt( the_resource , key , corresponds )```; 
 - on that _Resource_ we set the following key to be (true or false) as a value . 
-- after this , we call curl_exec() , which make the execution on the Resource and returns the result , that is the user's JSON .
+- after this , we call `curl_exec()` , which make the execution on the Resource and returns the result , that is the user's JSON .
 
 ```php in index.php
 $url = 'https://jsonplaceholder.typicode.com/users';
@@ -94,44 +94,56 @@ print_r($info);
     [effective_method] => GET
 */
 ```
+or  we can specifically use `CURLINFO_HTTP_CODE` to get the `status code` of the `response`. 
 
-
-// OR , we can specify , CURLINFO_HTTP_CODE 
-
-// Get response status code 
-
-
+```php
 $httpCode = curl_getinfo($resource , CURLINFO_HTTP_CODE);
 echo "the Http code is : $httpCode\n";
+```
+after that , we need to call curl_close( the_resource ); 
 
-// after that , we need to call curl_close( the_resource ); 
-#  after we call the curl_close() , we can't actullay get any info on this $url  
+Explain :
+- after we call the curl_close() , we can't actullay get any info on this $url  
+- the following code : 
+    ```php
+        $url = 'https://jsonplaceholder.typicode.com/users';
+    ```
+    Defines the URL of the endpoint you want to fetch data from.
+- the following code : 
+    ```php
+        $resource = curl_init($url);
+    ```
+    Initializes a cURL session (curl_init) with the specified URL, creating a cURL handle ($resource) for further configuration.
+- the following code : 
+    ```php
+        curl_setopt($resource, CURLOPT_RETURNTRANSFER, true);
+    ```
+    Sets an option on the cURL handle ($resource) to return the response data as a string (CURLOPT_RETURNTRANSFER).
+    This option tells cURL to return the response from the server as a string rather than outputting it directly.
+- the following code : 
+     ```php
+        $result = curl_exec($resource);
+    ```
+    Executes the cURL request (curl_exec) using the configured cURL handle ($resource).
+    It sends the request to the specified URL and retrieves the response.
 
 
 
-#   $url = 'https://jsonplaceholder.typicode.com/users';: Defines the URL of the endpoint you want to fetch data from.
-#   $resource = curl_init($url);: Initializes a cURL session (curl_init) with the specified URL, creating a cURL handle ($resource) for further configuration.
+## Post Request  and `set_opt_array`
 
-#   curl_setopt($resource, CURLOPT_RETURNTRANSFER, true);: Sets an option on the cURL handle ($resource) to return the response data as a string (CURLOPT_RETURNTRANSFER).
-#   This option tells cURL to return the response from the server as a string rather than outputting it directly.
+#### make a `POST` Request on that endpoint 
 
-#   $result = curl_exec($resource);: Executes the cURL request (curl_exec) using the configured cURL handle ($resource).
-#   It sends the request to the specified URL and retrieves the response.
+##### 1- init : `curl_init();` => this return the resource : the handle `$resource`
 
+```php
+$POSTresource = `curl_init();`
+```
 
+##### set optins .
+- we have curl_setopt( handle , option , value );
+- we have curl_setopt_array( handle , [ associative array of optoins and values]  );
 
-// Post Request  and set_opt_array
-
-# make a POST Request on that endpoint 
-
-# 1- init : curl_init(); => this return the resource : the handle $resource
-
-$POSTresource = curl_init();
-
-# 2- set optins 
-#   2.1 - we have curl_setopt( handle , option , value );
-#   2.1 - we have curl_setopt_array( handle , [ associative array of optoins and values]  );
-
+```php
 $user = [
     'name'  =>  'jhon Doe',
     'username'  =>  'jhon',
@@ -145,11 +157,14 @@ curl_setopt_array($resource  , [
     CURLOPT_HTTPHEADER  =>  ['content-type: Application/json'],
     CURLOPT_POSTFIELDS  =>  json_encode($user),
 ]);
+```
 
-# then executae the result 
+##### then executae the result 
 
+```php
 $POSTresult = curl_exec($resource);
 
 echo $POSTresult ; 
+```
 
-#     CURLOPT_POSTFIELDS  =>    : the user that i want actually to create .
+#####     CURLOPT_POSTFIELDS  =>    : the user that I want actually to create .
