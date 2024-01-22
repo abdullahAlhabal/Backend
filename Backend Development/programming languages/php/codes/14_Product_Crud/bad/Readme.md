@@ -730,7 +730,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     
     
     if($image && $image['tmp_name']){
-    
+        // to make sure that the "form input -> image " have an uploaded image so we need to double check for $image['tmp_name'] 
         if($product['image'])
             unlink($product['image']);
 
@@ -839,3 +839,51 @@ function randomString($n){
     </html>
 ```
 
+#### in case we need to make `Search` in the database .
+
+- in the `index.php` we will put a `form` with `input` to write the `search keywords` 
+- the `action` to the same page , and the `method` is `GET` 
+- so that we will use the `query string` to `get` the `search keywords` and `search` in the `mysql` database 
+```php
+<form action="index.php" method="post">
+    <div class="input-group mt-3">
+        <input class="form-control" name="search" type="text" placeholder="Search for products" value="<?php echo $search?>">
+        <div class="input-group-append">
+            <button type="submit" class="btn btn-outline-secondary"> Search</button>
+        </div>
+    </div>
+</form>
+```
+- then , after we set `PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTOIN`, we check if there are `search` in the `query string`
+```php
+$search = $_GET['search'];
+```
+- if there are a `search keywords` then we need to search in the database 
+- if there aren't `search keywords` then we get the whole `products`
+```php
+$search = $_GET['search'];
+if($search){
+    $statement = $pdo->prepare('SELECT * FROM products WHERE title LIKE :search ORDER BY create_date DESC');
+    $statement->bindValue(':search' , "%" . $search . "%");
+    $statement->execute();
+    $statement->fetchAll(PDO::FETCH_ASSOC);
+}else{
+    $statement = $pdo->prepare('SELECT * FROM products ORDER BY create_date DESC');
+    $statement->bindValue(':search' , "%" . $search . "%");
+    $statement->execute();
+    $statement->fetchAll(PDO::FETCH_ASSOC);
+}
+```
+- we can make the code more better by doing 
+```php
+$search = $_GET['search'];
+if($search){
+    $statement = $pdo->prepare('SELECT * FROM products WHERE title LIKE :search ORDER BY create_date DESC');
+    $statement->bindValue('',"%" . $search . "%");
+}else{
+    $statement = $pdo->prepare('SELECT * FROM products ORDER BY create_date DESC');
+}
+$statement->execute();
+$products = $statement->fetchAll(PDO::FETCH_ASSOC);
+```
+- then we can use it in the `index.php` in the `HTML TABLE` . 

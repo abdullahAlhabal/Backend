@@ -8,12 +8,18 @@ $pdo = new PDO('mysql:host=localhost;port=3306;dbname=products_crud','root','');
 # using this line of code , we actullay already establish connection to the database , but we want to tell $pdo what to do if the connection to the database not successfully done. 
 $pdo->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
 
-$statement = $pdo->prepare('SELECT * FROM products ORDER BY create_date DESC');
+// for the search
+$search = $_GET['search'] ?? '';
+if($search){
+    $statement = $pdo->prepare("SELECT * FROM products WHERE title LIKE :search ORDER BY create_date DESC ");
+    $statement->bindValue(':search', "%" . $search . "%");
+}else{
+  
+  $statement = $pdo->prepare('SELECT * FROM products ORDER BY create_date DESC');
+}
 
 $statement->execute();
-$products = $statement->fetchAll(PDO::FETCH_ASSOC); // i want to each record inside the table to be fetched as an asscoiative array  
-
-
+$products = $statement->fetchAll(PDO::FETCH_ASSOC);
 
 // $pdo = new PDO();
 // dsn , user , password
@@ -52,6 +58,15 @@ $products = $statement->fetchAll(PDO::FETCH_ASSOC); // i want to each record ins
         <p>
           <a href="create.php" class="btn btn-success"> Create </a>
         </p>
+
+        <form action="index.php" action="get">
+          <div class="input-group mb-3">
+            <input type="text" name="search" placeholder="Search for products" class="form-control" value="<?php echo $search ?>" >
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary" type="submit"  >Search</button>
+            </div>
+          </div>
+          </form>
 
         <!-- get table design from Bootstrap -->
         <table class="table">
