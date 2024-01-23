@@ -1,5 +1,5 @@
-/vendor/
-composer.lock
-/.env
-/.idea
-/.vscode
+./vendor/
+./composer.lock
+./.env
+./.idea
+./.vscode
