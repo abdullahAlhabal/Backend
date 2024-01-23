@@ -1,8 +1,8 @@
 <?php 
 
 /** @var $pdo \PDO */
-require_once "./database.php";
-require_once "./functions.php";
+require_once "../../database.php";
+require_once "../../functions.php";
 
 $errors = [];
 
@@ -16,7 +16,7 @@ $product = [
 
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
-  include_once "./validationProduct.php";
+  include_once "../../validationProduct.php";
 
   if(empty($errors)){
     
@@ -38,7 +38,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 ?>
 
 
-<?php include_once "./views/partials/header.php" ?>
+<?php include_once "../../views/partials/header.php" ?>
 
         <h1> Product CRUD</h1>
         
@@ -46,6 +46,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         <a href="index.php" class="btn btn-success"> Cancle </a>
       </p>
 
-      <?php include_once "./views/products/form.php" ?>
+      <?php include_once "../../views/products/form.php" ?>
       
-<?php include_once "./views/partials/footer.php" ?>
+<?php include_once "../../views/partials/footer.php" ?>

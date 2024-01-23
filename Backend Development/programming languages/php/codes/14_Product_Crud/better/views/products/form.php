@@ -9,7 +9,7 @@
         <form action="" method="post" enctype="multipart/form-data">
           
             <?php if($product['image']):?>
-                <img src="<?php echo $product['image']?>" alt="image for <?php echo $product['title']?> " class="image-preview">
+                <img src="/<?php echo $product['image']?>" alt="image for <?php echo $product['title']?> " class="image-preview">
             <?php endif;?>
 
             <div class="form-group my-3">

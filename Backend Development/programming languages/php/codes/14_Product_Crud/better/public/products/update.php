@@ -1,8 +1,8 @@
 <?php 
 
 /** @var $pdo \PDO */
-require_once "./database.php";
-require_once "./functions.php";
+require_once "../../database.php";
+require_once "../../functions.php";
 
 $id = $_GET['id'] ?? null ;
 
@@ -26,7 +26,7 @@ $description = $product['description'];
 
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
-  include_once "./validationProduct.php";
+  include_once "../../validationProduct.php";
 
   if(empty($errors)){
     
@@ -52,7 +52,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 }
 ?>
 
-<?php include_once "./views/partials/header.php"?>
+<?php include_once "../../views/partials/header.php"?>
 
   <p>
       <a href="index.php" class="btn btn-default">Back to products</a>
@@ -60,6 +60,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
   <h1>Update Product: <b><?php echo $product['title'] ?></b></h1>
 
-  <?php include_once "./views/products/form.php" ?>
+  <?php include_once "../../views/products/form.php" ?>
 
-<?php include_once "./views/partials/footer.php"?>
+<?php include_once "../../views/partials/footer.php"?>

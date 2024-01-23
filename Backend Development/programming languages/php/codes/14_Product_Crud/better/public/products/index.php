@@ -1,7 +1,7 @@
 <?php 
 
 /** @var $pdo \PDO */
-require_once "./database.php";
+require_once "../../database.php";
 
 $search = $_GET['search'] ?? '';
 
@@ -18,7 +18,7 @@ $products = $statement->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
-<?php include_once "./views/partials/header.php"?>
+<?php include_once "../../views/partials/header.php"?>
         <h1> Product CRUD </h1>
 
         <p>
@@ -77,4 +77,4 @@ $products = $statement->fetchAll(PDO::FETCH_ASSOC);
           </tbody>
 
         </table>
-<?php include_once "./views/partials/footer.php"?>
+<?php include_once "../../views/partials/footer.php"?>

@@ -170,4 +170,41 @@ $products = $statement->fetchall(PDO::FETCH_ASSOC);
   ```
 ## more Refactoring 
 
-- inside the `index.php`
+- inside the `index.php` , we can access to `/db.php` , we can access to `/functions.php` and the `/validateProduct.php` 
+- and it's a very bad practice to access the `files` through/from the browser , which shouldn't be accessible from the browser 
+- we should move only the `files` only in a specific folder only the `files` should be `web accessible` 
+- in the modern `Frameworks` , they exists in a `public` folder , and this `public` folder is only `web accessible` , maybe also called `web`
+- move `create` , `delete` , `update` and `index` as only `web accessible` php files inside that `pubilc` folder
+- inside the `public` folder , we also will create a subfolder , in order if our website get larger then we will have alot of `CRUDs` 
+- adjust how we are requireing [`inclusion`] : so that , we need to modify the paths inside each one of `create` , `delete` , `update` and `index` , like the stylesheet and javascript and other links .
+
+## Good Practice to be started in a `Virtual Host` 
+- we create a `virtual host` and we run application in that `virtual host`
+- a `simulation` of `virtual host` will be `php's built-in server` 
+- open `terminal` , and go to the `public folder` , then we start the `php's built-in server` using 
+```terminal
+php -S localhost:8080
+```
+- then we can run the application , and we need to move the css files to that public folder and make a `absolute path` for files 
+- move `app.css` to `/public` and in the `view/partials/header.php` the `<link href="app.css">` make it `<link href="/app.css">` .
+- for uploaded `images` , in the `validationProduct.php` we save the `image` in the `relative`
+- `validationProduct.php` 
+```php
+if(!is_dir('/images')){
+  mkdir('/images');
+}
+```
+- `views/products/form.php` 
+```php
+<?php if($product['image']):?>
+  <img src="/<?php echo $product['image']?>" alt="image for <?php echo $product['title']?> " class="image-preview">
+<?php endif;?>
+```
+- `views/partials/header.php` 
+```php
+  <link rel="stylesheet" href="/app.css">
+```
+- after that , when upload a new `image` , it will be uploaded in a different folder , because , in the `validationProduct.php`  
+- when we do some operation with `file system` , we just specify a `relative path` 
+- any path , given to a function works with `file system` , so any path basically is `relative` to the current file which is executed 
+- 
