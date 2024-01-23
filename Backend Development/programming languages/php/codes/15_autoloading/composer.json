@@ -1,0 +1,17 @@
+{
+    "name": "dbnka/15_autoloading",
+    "autoload": {
+        "psr-4": {
+            "app\\" : "./app"
+        }
+    },
+    "authors": [
+        {
+            "name": "Abdullah AlHabal",
+            "email": "dbnkalhbalb@gmail.com"
+        }
+    ],
+    "require": {
+        "guzzlehttp/guzzle": "^7.8"
+    }
+}
