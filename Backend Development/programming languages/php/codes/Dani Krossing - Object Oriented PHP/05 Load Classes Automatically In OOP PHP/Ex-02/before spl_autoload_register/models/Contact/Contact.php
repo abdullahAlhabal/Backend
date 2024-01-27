@@ -1,5 +1,7 @@
 <?php
 
+namespace Contact;
+
 class Contact{
 
     private $email ;

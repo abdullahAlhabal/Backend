@@ -24,7 +24,7 @@ require_once "load.php";
 
 // in this case 
 
-$contact = new Contact("abdullah@gmail.com");
+$contact = new Contact\Contact("abdullah@gmail.com");
 
-echo Email::sendEmail($contact->getEmail());
+echo Email\Email::sendEmail($contact->getEmail());
 ?>
