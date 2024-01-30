@@ -18,15 +18,17 @@ interface Document extends Readable, Writable{
 class Paper implements Document {
 
     public function Read(){
-        
+        echo "Read()\n";
     }
     public function write(){
-        
+        echo "write()\n";        
     }
     public function getInfo(){
-        
+        echo "getInfo()\n";        
     }
 }
 
+$paper = new Paper();
+$paper->write();
 
 ?>

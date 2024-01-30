@@ -30,10 +30,26 @@ class FileLogger implements Logger{
     }
 }
 
-$file_logger = new FileLogger("txt.txt" , 'w');
-$file_logger->log("Hire Me now!");
+class DatabaseLogger implements Logger{
+    public function log($message){
+        echo sprintf("Log : %s  - into the database - %s",$message,date('Y-m-d H:i:s'));
+    }
+}
 
+// $file_logger = new FileLogger("txt.txt" , 'a');
+// $file_logger->log("Hire Me now!");
+// 
+// $database_logger = new DatabaseLogger();
+// $database_logger->log("MESSAGE HERE");
 
+$loggers = [
+    new FileLogger("test.txt" , 'a') ,
+    new DatabaseLogger() ,
+];
+
+foreach($loggers as $i => $log){
+    $i . " - " . $log->log("log ");
+}
 
 ?>
 
