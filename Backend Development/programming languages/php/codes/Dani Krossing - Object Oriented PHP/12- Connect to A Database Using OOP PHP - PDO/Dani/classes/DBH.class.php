@@ -20,6 +20,13 @@ class Dbh{
 
         $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE,PDO::FETCH_ASSOC);
 
+        return $pdo;
+
+    }
+}
+
+
+
 
         /**
         instead of using ->fetchAll(PDO::FETCH_ASSOC); OR ->fetch(PDO::FETCH_ASSOC); each time after execute the statement
@@ -35,22 +42,3 @@ class Dbh{
                 $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE,PDO::FETCH_OBJ);
 
         */
-
-        return $pdo;
-
-        // when we use this connect($dbname) method , we can do 
-        
-        /**
-            $pdoObject = new Dbh();
-            $pdo = $pdoObject->connect("test");
-            $statement = $pdo->prepare( SQL_CODE_GOES_HERE);
-        */
-
-    }
-
-
-
-}
-
-
-?>

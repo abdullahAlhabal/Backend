@@ -2,9 +2,9 @@
 
 require_once "./includes/classes-autoload.inc.php";
 
-$test = new Test();
+$test = new Interact();
 
-$users = $test->getUser("test");
+$users = $test->getUsers("test");
 
 
 if(!count($users)){
