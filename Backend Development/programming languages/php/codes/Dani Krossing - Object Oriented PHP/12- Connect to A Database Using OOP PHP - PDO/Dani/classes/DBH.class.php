@@ -2,8 +2,6 @@
 
 class Dbh{
 
-    private $pdo ;
-    private $dsn ;
     private $host = "localhost"; 
     private $port = 3306; 
     private $dbname ; 
@@ -13,12 +11,14 @@ class Dbh{
 
     protected function connect($dbname){
         $this->dbname = $dbname;
-        $this->dsn = "mysql:host={$this->host};port={$this->port};dbname={$this->dbname}";
-        $this->pdo = new PDO($this->dsn,$this->username,$this->password);
-        //
-        $this->pdo->setAttribute(PDO::ATTR_ERRMODE , PDO::ERRMODE_EXCEPTION); 
-        //
-        $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE,PDO::FETCH_ASSOC);
+
+        $dsn = "mysql:host={$this->host};port={$this->port};dbname={$this->dbname}";
+
+        $pdo = new PDO($dsn,$this->username,$this->password);
+
+        $pdo->setAttribute(PDO::ATTR_ERRMODE , PDO::ERRMODE_EXCEPTION); 
+
+        $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE,PDO::FETCH_ASSOC);
 
 
         /**
@@ -36,18 +36,21 @@ class Dbh{
 
         */
 
-        return $this->pdo;
+        return $pdo;
 
         // when we use this connect($dbname) method , we can do 
         
         /**
             $pdoObject = new Dbh();
-            $pdo = $pdoObject->connect("oop");
+            $pdo = $pdoObject->connect("test");
             $statement = $pdo->prepare( SQL_CODE_GOES_HERE);
-
         */
+
     }
 
 
 
 }
+
+
+?>
