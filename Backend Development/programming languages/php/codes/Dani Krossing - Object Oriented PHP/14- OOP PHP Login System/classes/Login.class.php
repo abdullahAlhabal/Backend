@@ -16,7 +16,7 @@ class Login extends Dbh{
         $this->verifyPassword($password,$hashedPassword);
         
         try{
-            $user = $this->getUserDetails($username,$hashedPassword, $pdo); // pass the hashedPassword
+            $user = $this->getUserDetails($username,$hashedPassword, $pdo); 
         }catch(Exception $ex){
             $this->handleError($ex->getMessage());
         }
