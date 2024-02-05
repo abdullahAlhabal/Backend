@@ -7,12 +7,12 @@ This project is a simple PHP-based login, signup, and logout system using OOP pr
 ## Installation Instructions
 
 1. Clone the repository:
-```bash
-git clone <repository-url>
+```
+git clone https://github.com/abdullahAlhabal/Backend.git
  ```
 2. Change directory:
 ```bash
-cd <project-directory>
+cd "Backend/Backend Development/programming languages/php/codes/Dani Krossing - Object Oriented PHP/14- OOP PHP Login System"
 ```
 3. Create the database using MySQL or PhpMyAdmin:
 ```SQL
