@@ -1,0 +1,41 @@
+we are here now!
+====================
+
+    protected function getUser($username, $password){
+        $hashedPassword = $this->getUserPassword($username);
+        
+        $this->verifyPassword($password,$hashedPassword);
+        
+        $user = $this->getUserDetails($username,$password);
+
+        $this->startSession($user);
+
+    }
+    private function getUserPassword($username){
+        $sql = "SELECT password FROM users WHERE username = :username ;";
+        $stmt = $this->connect()->prepare($sql);
+
+        $stmt->bindValue(":username",$username);
+
+        try{
+
+            $stmt->execute();
+            $hashedPassword = $stmt->fetchColumn();
+
+            if(empty($hashedPassword)){
+                $stmt = null;
+                header("location:./../index.php?error=userNotFound");
+                exit();    
+            }
+
+            return $hashedPassword;
+
+        }catch(Exception $ex){
+            $stmt = null;
+            $this->handleError($ex->getMessage());
+        }finally{
+            $stmt = null;
+        }
+
+    }
+====================
