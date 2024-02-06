@@ -1,1 +1,1 @@
-
+# list of commands that I use during my day to day learning and coding   
