@@ -33,7 +33,7 @@ abstract class Visa{
 }
 
 
-    - create an abstract functoin function , then all the classes that extends this clas , must have the same class 
+    - create an abstract  function , then all the classes that extends this clas , must have the same class 
 
 
 abstract class Visa{
@@ -54,5 +54,5 @@ abstract class Visa{
         return "perform a payment via Visa!\n";
     }
 
-    abstract public function getPayment();
+     abstract public function getPayment();
 }

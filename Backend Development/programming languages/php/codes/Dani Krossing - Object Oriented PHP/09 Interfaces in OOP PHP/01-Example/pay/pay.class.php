@@ -73,7 +73,7 @@ class BuyProduct{
     public function pay(PaymentInterface $paymentType){
         // grab one of the paymnets upthere and do the purchase 
         // in ordre to that , we have to set this up in a way where we 
-        // can use this method latero on
+        // can use this method later on
 
         // we need to pass a payment type , with type hinting , 
         
